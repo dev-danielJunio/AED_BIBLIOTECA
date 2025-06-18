@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class UnidadeAtendimentoDAO {
         this.conexaoBanco = conexaoBanco;
     }
 
-    public List<UnidadeAtendimento> listaUnidadeAtendimento() {
+    public List<UnidadeAtendimento> listaUnidadeAtendimento() throws SQLException {
         List<UnidadeAtendimento> lista = new ArrayList<>();
 
         String sql = "select * from biblioteca.tab_unidades_atendimento";
@@ -42,11 +43,12 @@ public class UnidadeAtendimentoDAO {
 
         }catch (Exception e){
             e.printStackTrace();
+            throw e;
         }
         return lista;
     }
 
-    public void inserirUnidadeAtendimento(UnidadeAtendimento unidade) {
+    public void inserirUnidadeAtendimento(UnidadeAtendimento unidade) throws Exception {
         String sql = "INSERT INTO biblioteca.tab_unidades_atendimento (codigo, nome, endereco, telefone, bibliotecaria_responsavel) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = conexaoBanco.conectar();
@@ -61,10 +63,12 @@ public class UnidadeAtendimentoDAO {
             stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
     }
 
-    public void atualizarUnidadeAtendimento(UnidadeAtendimento unidade) {
+
+    public void atualizarUnidadeAtendimento(UnidadeAtendimento unidade) throws SQLException {
         String sql = "UPDATE biblioteca.tab_unidades_atendimento SET nome = ?, endereco = ?, telefone = ?, bibliotecaria_responsavel = ? WHERE codigo = ?";
 
         try (Connection conn = conexaoBanco.conectar();
@@ -79,10 +83,11 @@ public class UnidadeAtendimentoDAO {
             stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
     }
 
-    public void deletarUnidadeAtendimento(int codigo) {
+    public void deletarUnidadeAtendimento(int codigo) throws SQLException {
         String sql = "DELETE FROM biblioteca.tab_unidades_atendimento WHERE codigo = ?";
 
         try (Connection conn = conexaoBanco.conectar();
@@ -92,6 +97,7 @@ public class UnidadeAtendimentoDAO {
             stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
     }
 

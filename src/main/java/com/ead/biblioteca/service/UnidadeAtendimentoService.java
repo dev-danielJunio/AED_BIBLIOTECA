@@ -4,6 +4,7 @@ import com.ead.biblioteca.dao.UnidadeAtendimentoDAO;
 import com.ead.biblioteca.model.UnidadeAtendimento;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -16,21 +17,21 @@ public class UnidadeAtendimentoService {
         this.unidadeAtendimentoDAO = unidadeDAO;
     }
 
-    public List<UnidadeAtendimento> listarTodasUnidadeAtendimento() {
+    public List<UnidadeAtendimento> listarTodasUnidadeAtendimento() throws SQLException {
         return  unidadeAtendimentoDAO.listaUnidadeAtendimento();
     }
 
-    public UnidadeAtendimento incluir(UnidadeAtendimento unidadeAtendimento) {
-        unidadeAtendimentoDAO.inserirUnidadeAtendimento(unidadeAtendimento); // método que insere no banco
+    public UnidadeAtendimento incluir(UnidadeAtendimento unidadeAtendimento) throws Exception {
+        unidadeAtendimentoDAO.inserirUnidadeAtendimento(unidadeAtendimento);
         return unidadeAtendimento;
     }
 
-    public UnidadeAtendimento alterar(UnidadeAtendimento unidadeAtendimento) {
+    public UnidadeAtendimento alterar(UnidadeAtendimento unidadeAtendimento) throws SQLException {
         unidadeAtendimentoDAO.atualizarUnidadeAtendimento(unidadeAtendimento);
         return unidadeAtendimento;
     }
 
-    public void excluir(int codigo) {
+    public void excluir(int codigo) throws SQLException {
         unidadeAtendimentoDAO.deletarUnidadeAtendimento(codigo);
     }
 

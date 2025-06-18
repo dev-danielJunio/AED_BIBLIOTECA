@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @Validated
 @RestController
 @RequestMapping("/biblioteca/unidades")
@@ -24,9 +24,14 @@ public class UnidadeAtendimentoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UnidadeAtendimento>> listarTodas() {
-        List<UnidadeAtendimento> lista = unidadeService.listarTodasUnidadeAtendimento();
-        return ResponseEntity.ok(lista);
+    public ResponseEntity<?> listarTodas() {
+        try {
+            List<UnidadeAtendimento> lista = unidadeService.listarTodasUnidadeAtendimento();
+            return ResponseEntity.ok(lista);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao listar unidades: " + e.getMessage());
+        }
     }
 
     @PostMapping
@@ -39,16 +44,27 @@ public class UnidadeAtendimentoController {
                     .body("Erro ao criar unidade: " + e.getMessage());
         }
     }
+
     @PutMapping("/{codigo}")
-    public ResponseEntity<UnidadeAtendimento> alterar(@PathVariable int codigo, @RequestBody @Valid UnidadeAtendimento unidadeAtendimento) {
-        unidadeAtendimento.setCodigo(codigo);
-        UnidadeAtendimento atualizada = unidadeService.alterar(unidadeAtendimento);
-        return ResponseEntity.ok(atualizada);
+    public ResponseEntity<?> alterar(@PathVariable int codigo, @RequestBody @Valid UnidadeAtendimento unidadeAtendimento) {
+        try {
+            unidadeAtendimento.setCodigo(codigo);
+            UnidadeAtendimento atualizada = unidadeService.alterar(unidadeAtendimento);
+            return ResponseEntity.ok(atualizada);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Erro ao alterar unidade: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/{codigo}")
-    public ResponseEntity<Void> excluir(@PathVariable int codigo) {
-        unidadeService.excluir(codigo);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> excluir(@PathVariable int codigo) {
+        try {
+            unidadeService.excluir(codigo);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Erro ao excluir unidade: " + e.getMessage());
+        }
     }
 }
