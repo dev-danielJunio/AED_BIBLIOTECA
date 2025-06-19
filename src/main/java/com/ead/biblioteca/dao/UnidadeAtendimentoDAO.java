@@ -25,7 +25,9 @@ public class UnidadeAtendimentoDAO {
     public List<UnidadeAtendimento> listaUnidadeAtendimento() throws SQLException {
         List<UnidadeAtendimento> lista = new ArrayList<>();
 
-        String sql = "select * from biblioteca.tab_unidades_atendimento";
+        String sql = "SELECT u.codigo, u.nome AS nome_unidade, u.endereco, u.telefone, u.bibliotecaria_responsavel AS matricula_bibliotecaria, b.nome AS nome_bibliotecaria " +
+                "FROM biblioteca.tab_unidades_atendimento u " +
+                "JOIN biblioteca.tab_bibliotecarias b ON u.bibliotecaria_responsavel = b.matricula";
 
         try(Connection conn = conexaoBanco.conectar();
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -34,10 +36,11 @@ public class UnidadeAtendimentoDAO {
             while(rs.next()){
                 UnidadeAtendimento unidadeAtendimento = new UnidadeAtendimento();
                 unidadeAtendimento.setCodigo(rs.getInt("codigo"));
-                unidadeAtendimento.setNomeUnidade(rs.getString("nome"));
+                unidadeAtendimento.setNomeUnidade(rs.getString("nome_unidade"));
                 unidadeAtendimento.setEndereco(rs.getString("endereco"));
                 unidadeAtendimento.setTelefone(rs.getLong("telefone"));
-                unidadeAtendimento.setBibliotecaria_responsavel(rs.getInt("bibliotecaria_responsavel"));
+                unidadeAtendimento.setBibliotecaria_responsavel(rs.getInt("matricula_bibliotecaria"));
+                unidadeAtendimento.setNome_bibliotecaria(rs.getString("nome_bibliotecaria"));
                 lista.add(unidadeAtendimento);
             }
 

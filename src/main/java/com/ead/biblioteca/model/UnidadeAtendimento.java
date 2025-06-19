@@ -11,4 +11,5 @@ public class UnidadeAtendimento {
     private String endereco;
     private long telefone;
     private int bibliotecaria_responsavel;
+    private String nome_bibliotecaria;
 }
